@@ -1,4 +1,5 @@
 export const reducer = (state, action)=>{
+    
 
     if(action.type==='ADD_ITEM'){
         const oneMeeting = [...state.meeting,action.payload]
@@ -7,6 +8,19 @@ export const reducer = (state, action)=>{
             meeting:oneMeeting,
             isModalOpen:true,
             modalContent:'Meeting Added !'
+        };
+
+        
+
+    }
+
+    if(action.type==='UPDATED_ITEM'){
+        const oneMeeting = [...state.meeting,action.payload]
+        return{
+            ...state,
+            meeting:oneMeeting,
+            isModalOpen:true,
+            modalContent:'Meeting Updated!'
         };
 
         
@@ -38,14 +52,19 @@ export const reducer = (state, action)=>{
         }
     }
 
+
+        
+
+       
     if(action.type==="UPDATE_ITEM"){
         const oldMeeting = state.meeting.filter((singleMeeting)=>singleMeeting.id !== action.payload);
         
         return{
             ...state,
-            meeting:oldMeeting
+            meeting:oldMeeting,
+            isModalOpen:true,
+            modalContent:'Meeting Ready to be updated'
         }
-       
     }
 
 
@@ -53,6 +72,5 @@ export const reducer = (state, action)=>{
 
 
  
-
 
 }

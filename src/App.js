@@ -14,6 +14,9 @@ function App() {
     modalContent:'',
     
   }
+
+  // this.handleChange = this.handleChange.bind(this);
+  // this.onSubmit = this.onSubmit.bind(this);
   
 
   const[form,setForm] = useState({meetingName:'',location:''})
@@ -23,8 +26,7 @@ function App() {
   
 
   const handleChange=(e)=>{
-    const name= e.target.name
-    const value = e.target.value
+    const {name,value} = e.target
     setForm({...form,[name]:value})
     
   }
@@ -34,7 +36,24 @@ function App() {
     setIsEditing(true)
     setEditID(id)
     setForm(specificItem)
+    dispatch({type:'UPDATE_ITEM',payload: id})
     
+    
+    
+  }
+
+  const updateItem = () =>{
+    return state.meeting.map((item)=>{
+      if(item.id===editID){
+        return{
+          ...item
+        }  
+      }
+      return {
+        item
+      }
+      
+    })
   }
 
   const onSubmit = (e)=>{
@@ -47,22 +66,11 @@ function App() {
     if(form.meetingName&&form.location){
       const newMeeting = {...form,id: new Date().getTime().toString()}
       dispatch({type:'ADD_ITEM',payload:newMeeting})
-      editItem(
-        dispatch({type:'UPDATE_ITEM'})
-      )
-      
-      setForm({meetingName:'',location:''})
-          
+      setForm({meetingName:'',location:''})     
     }
-
-
     setEditID(null);
     setIsEditing(false)
-
-
   }
-
-
   const closeModal = ()=>{
     dispatch({ type: 'CLOSE_MODAL' });
   }
@@ -93,7 +101,18 @@ function App() {
                 />
               </div>
               <div className="main-btn">
-                <button type='submit' onClick={onSubmit}>{isEditing ?'Update Meeting':'Add Meeting'}</button>
+                {isEditing ? (
+                <button
+                  type="submit"
+                  onClick={(e)=>updateItem(e)}
+                >
+                  Update Meeting
+                </button>
+              ) : (
+                <button type="submit" onClick={onSubmit}>
+                  Add Meeting
+                </button>
+              )}
               </div>
             </form>   
         </div>
